@@ -15,10 +15,11 @@ enable_testing()
 # Find packages (Armadillo, CUDA, ITK & VTK) :
 #
 # Armadillo :
+# https://cmake.org/cmake/help/v3.0/module/FindArmadillo.html
 Find_Package(Armadillo REQUIRED)
 Include_Directories(${ARMADILLO_INCLUDE_DIRS})
 IF (ARMADILLO_FOUND)
-    Include(${ARMADILLO_INCLUDE_DIRS})
+    Include_directories(${ARMADILLO_INCLUDE_DIRS})
     Message("Armadillo is found")
 ELSE (ARMADILLO_FOUND)
     MESSAGE(FATAL_ERROR "Armadillo was not found :(")
@@ -28,7 +29,7 @@ ENDIF (ARMADILLO_FOUND)
 # ITK :
 Find_Package(ITK)
 If (ITK_FOUND)
-    Include (${USE_ITK_FILE})
+    Include (${ITK_USE_FILE})
 Else (ITK_FOUND)
     Message (FATAL_ERROR "ITK not found. Please set ITK_DIR.")
 Endif (ITK_FOUND)
