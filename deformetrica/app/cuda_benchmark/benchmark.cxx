@@ -24,8 +24,8 @@ int main(int argc, char** argv)
 		typedef float TScalar;
 		std::cout << "(Computations are in simple precision)" << std::endl << std::endl;
 	#endif
-	typedef typename LinearAlgebra<TScalar>::Vector VectorType;
-	typedef typename LinearAlgebra<TScalar>::Matrix MatrixType;
+	typedef LinearAlgebra<TScalar>::Vector VectorType;
+	typedef LinearAlgebra<TScalar>::Matrix MatrixType;
 
 	const unsigned int Dimension = 3;
 	const unsigned int WeightDimension = 1*Dimension;
@@ -80,7 +80,7 @@ int main(int argc, char** argv)
 	}
 
 	typedef KernelFactory<TScalar, Dimension> KernelFactoryType;
-	typedef typename KernelFactoryType::KernelBaseType KernelType;
+	typedef KernelFactoryType::KernelBaseType KernelType;
 
 	KernelFactoryType* kFactory = KernelFactoryType::Instantiate();
 

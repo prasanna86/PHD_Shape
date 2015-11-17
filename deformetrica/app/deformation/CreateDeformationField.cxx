@@ -57,7 +57,7 @@ int main(int argc, char** argv)
 
 	const unsigned int Dimension = 3;
 
-	typedef typename LinearAlgebra<TScalar>::Matrix MatrixType;
+	typedef LinearAlgebra<TScalar>::Matrix MatrixType;
 	typedef std::vector<MatrixType> MatrixList;
 
 	// Read initial CPs and Momentas:
