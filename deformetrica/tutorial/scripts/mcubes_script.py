@@ -1,10 +1,10 @@
 import os
-import getopt, sys
-import glob
-import os.path
 
 def main():
 	
+	####################################################################
+	###        Ensure these paths are correct for your system        ###
+	####################################################################
 	mcubes_path = '/home/jfishbaugh/software/irtk/mcubes'
 	extractlabel_path = '../../utils/bin/extractlabel'
 	data_path = '../data/'
@@ -17,7 +17,7 @@ def main():
 		
 	print ''
 								
-	for i in range(0,1):# len(subjects)): 
+	for i in range(0, len(subjects)): 
 		
 		print '/======================================================='
 		print '| Working on subject ' + subjects[i] + '  (' + str(i+1) + ' of ' + str(len(subjects)) + ')'
