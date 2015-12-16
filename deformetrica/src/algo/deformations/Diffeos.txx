@@ -732,6 +732,7 @@ Diffeos<TScalar, Dimension>
 
 	std::vector<unsigned int> times;
 	times.resize(0);
+
 	this->IntegrateAdjointEquations(ListInitialConditionsLandmarkPoints, ListInitialConditionsImagePoints, times);
 }
 

@@ -426,7 +426,7 @@ Atlas<TScalar, Dimension>
 	/// Divide each gradient of the data term by 1/(2*DataSigmaSquared)
 	for (int i = 0; i < m_NumberOfObjects; i++)
 		GradientSimilarityMetric[i] /= ( 2.0 * m_DataSigmaSquared(i) );
-
+	
 	/// pool the gradients into big matrices for all objects of type landmarks (and children types) and image (and children types)
 	MatrixType GradientDataTermOfLandmarkTypes;
 	MatrixType GradientDataTermOfImageTypes;
@@ -510,11 +510,6 @@ Atlas<TScalar, Dimension>
 	// m_GradPos /= m_NumberOfSubjects;
 		gradTempL_Sob = this->ConvolveGradTemplate(gradTempL_L2);
 
-		
-		//cout<<"gradPos "<<gradPos<<"\n";
-		//cout<<"gradMom "<<gradMom[0]<<"\n";	
-
-
 		return;
 	}
 
@@ -556,6 +551,9 @@ Atlas<TScalar, Dimension>
 	gradPos = m_MT_GradPos;
 	gradMom = m_MT_GradMom;
 	gradTempL_L2 = m_MT_GradTempL_L2;
+	
+	
+	
 
 	gradTempL_Sob = this->ConvolveGradTemplate(gradTempL_L2);
 
@@ -569,6 +567,7 @@ Atlas<TScalar, Dimension>
 ::ComputeDataTermGradient(const MatrixList& Momentas, const std::vector< DeformableMultiObjectType* > target,
 		MatrixType& gradPos, MatrixList& gradMom, MatrixList& gradTempL, bool do_Sobolev_Template_Gradient)
  {
+	 
 	MatrixList Aux;
 	if (do_Sobolev_Template_Gradient)
 		ComputeDataTermGradient(Momentas, target, gradPos, gradMom, Aux, gradTempL);

@@ -404,8 +404,8 @@ RegressionEstimator<TScalar, Dimension>
  				
  			}
 
- 			TScalar initStepXA = this->m_InitialStepMultiplier * m_ValuesHistory[0]->GetTotalL2Value() / maxGrad / maxGrad;
- 			TScalar initStepT = initStepXA;
+ 			TScalar initStepXA = this->m_InitialStepMultiplier * m_ValuesHistory[0]->GetTotalL2Value() / maxGrad / maxGrad;		
+			TScalar initStepT = initStepXA;
 
  			stepXA = initStepXA;
  			stepT = initStepT;

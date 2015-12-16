@@ -58,4 +58,24 @@ Target_Link_Libraries(MapsEllipsoidWithSource
     ${VTK_LIBRARIES}
 )
 
+ADD_EXECUTABLE(extractlabel extractlabel.cxx)
 
+TARGET_LINK_LIBRARIES(extractlabel
+ ${ITK_LIBRARIES}
+)
+
+ADD_EXECUTABLE(surftransform surftransform.cxx surfio.cxx)
+
+TARGET_LINK_LIBRARIES(surftransform
+ ${ITK_LIBRARIES}
+ ${VTK_LIBRARIES})
+
+ADD_EXECUTABLE(surfvolume surfvolume.cxx surfio.cxx)
+
+TARGET_LINK_LIBRARIES(surfvolume
+ ${VTK_LIBRARIES})
+
+ADD_EXECUTABLE(surfdecimate surfdecimate.cxx surfio.cxx)
+
+TARGET_LINK_LIBRARIES(surfdecimate
+ ${VTK_LIBRARIES})

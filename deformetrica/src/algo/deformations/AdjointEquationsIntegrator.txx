@@ -90,7 +90,7 @@ AdjointEquationsIntegrator<TScalar, Dimension>
 	{
 		m_ThetaT[m_NumberOfTimePoints-1].fill(0.0);
 	}
-
+	
 	TScalar dt = (m_TN - m_T0) / (m_NumberOfTimePoints-1);
 	int subjIndex = m_JumpTimes.size()-1;
 
@@ -107,16 +107,16 @@ AdjointEquationsIntegrator<TScalar, Dimension>
 		kernelObj->SetSources(m_PosT[t]);
 		kernelObj->SetWeights(m_MomT[t]);
 
-		MatrixType dTheta = kernelObj->ConvolveGradient(m_LandmarkPointsT[t], m_ThetaT[t]);
-
 		if (m_HasJumps)
 		{
 			if (t == m_JumpTimes[subjIndex])
 			{
-				dTheta += m_ListInitialConditionsLandmarkPoints[subjIndex];
+				m_ThetaT[t] += m_ListInitialConditionsLandmarkPoints[subjIndex];
 			}
 		}
 		
+		MatrixType dTheta = kernelObj->ConvolveGradient(m_LandmarkPointsT[t], m_ThetaT[t]);
+
 		m_ThetaT[t-1] = m_ThetaT[t] + dTheta * dt; // the plus is correct! dTheta should be negative.
 
 		// Heun's method
@@ -126,19 +126,18 @@ AdjointEquationsIntegrator<TScalar, Dimension>
 			kernelObj->SetSources(m_PosT[t-1]);
 			kernelObj->SetWeights(m_MomT[t-1]);
 
-			MatrixType dTheta2 = kernelObj->ConvolveGradient(m_LandmarkPointsT[t-1], m_ThetaT[t-1]);
-
 			if (m_HasJumps)
 			{
 				if (t == m_JumpTimes[subjIndex])
 				{
-					dTheta2 += m_ListInitialConditionsLandmarkPoints[subjIndex];
+					//m_ThetaT[t-1] += m_ListInitialConditionsLandmarkPoints[subjIndex];
 					subjIndex--;
 					if (subjIndex < 0)
 						subjIndex = 0;
 				}
 			}
-
+			
+			MatrixType dTheta2 = kernelObj->ConvolveGradient(m_LandmarkPointsT[t-1], m_ThetaT[t-1]);
 			m_ThetaT[t-1] = m_ThetaT[t] + (dTheta + dTheta2) * (dt * 0.5);
 		}
 

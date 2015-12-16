@@ -404,10 +404,14 @@ Regression<TScalar, Dimension>
 	// A copy of the deformation is needed since this method can be called by different threads (maybe?) at the same time
 	DiffeosType* subjectDef = m_Def->Clone(); // shoot control points and momenta and flow baseline
 
+	//std::cout<<"	Shooting control points and momenta..."<<std::endl;
+
 	subjectDef->SetDeformableMultiObject(m_Template);
 	subjectDef->SetStartPositions(m_ControlPoints);
 	subjectDef->SetStartMomentas(momenta);
 	subjectDef->Update();
+
+	//std::cout<<"	DONE Shooting control points and momenta"<<std::endl;
 
 	if (subjectDef->OutOfBox())
 		throw std::runtime_error("Out of box in Regression::ComputeDataTermGradient (this should not be...)");
@@ -432,6 +436,8 @@ Regression<TScalar, Dimension>
 		}
 	}
 
+	//std::cout<<"	Computing gradient of data term..."<<std::endl;
+
 	// Compute gradient of data matching term
 	for (int s = 0; s < numberOfObservations; s++)
 	{
@@ -440,12 +446,17 @@ Regression<TScalar, Dimension>
 		/// Get the gradient of the similarity metric between deformed template and target
 		MatrixList gradDataTi = deformedTemplateObjects->ComputeMatchGradient(target[s]);
 
+		//std::cout<<gradDataTi[0]<<std::endl;
+
 		// We repackage the gradient matrices in a vector of size m_NumObjects, as the data classes expect
 		DeformableObjectList templateList = m_Template->GetObjectList();
 		for (int i=0; i<m_NumberOfObjects; i++)
 		{
 			MatrixType curGradTi = gradDataTi[i];
-			allGradXTi[s][i] = curGradTi / (2.0 * m_DataSigmaSquared[i]);
+			
+			TScalar thisIsPointlessButNecessary = 1 / (2.0 * this->m_DataSigmaSquared[i]);
+			allGradXTi[s][i] = curGradTi * thisIsPointlessButNecessary;
+			//allGradXTi[s][i] = curGradTi / (2.0 * this->m_DataSigmaSquared[i]);
 		}
 	}
 
@@ -465,7 +476,13 @@ Regression<TScalar, Dimension>
 		GradientDataTermOfImageTypes[s] = CurGradImage;
 	}
 
+	//std::cout<<"	DONE computing gradient of data term"<<std::endl;
+
+	//std::cout<<"	Integrating adjoint equations..."<<std::endl;
+	
 	subjectDef->IntegrateAdjointEquations(GradientDataTermOfLandmarkTypes, GradientDataTermOfImageTypes, timeIndices);
+
+	//std::cout<<"	DONE integrating adjoint equations..."<<std::endl;
 
 	/// Get the gradient w.r.t. deformation parameters and landmark points positions
 	gradPos = subjectDef->GetAdjointPosAt0();
