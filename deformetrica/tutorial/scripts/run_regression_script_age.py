@@ -5,7 +5,7 @@ def main():
 	####################################################################
 	###        Ensure these paths are correct for your system        ###
 	####################################################################
-	# Use absolute paths here
+	# Make sure to use absolute paths here
 	deformetrica_path = '/home/jfishbaugh/projects/neuro/huntingtons/deformetrica/PHD_ShapeGrant/deformetrica/bin/sparseGeodesicRegression3'
 	data_path = '/home/jfishbaugh/projects/neuro/huntingtons/deformetrica/PHD_ShapeGrant/deformetrica/tutorial/data/'
 	output_data_path = '/home/jfishbaugh/projects/neuro/huntingtons/deformetrica/PHD_ShapeGrant/deformetrica/tutorial/regression/'
