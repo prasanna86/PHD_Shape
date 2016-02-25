@@ -5,7 +5,7 @@ def main():
 	####################################################################
 	###        Ensure these paths are correct for your system        ###
 	####################################################################
-	brainsfit_path = '/home/jfishbaugh/software/SlicerBuild/Slicer-build/lib/Slicer-4.5/cli-modules/BRAINSFit'
+	brainsfit_path = '/home/sci/prasanna/work/git/BRAINSTools/build/bin/BRAINSFit'
 	reference_image = '../data/52598/41172/t1_average_BRAINSABC.nii.gz'
 	data_path = '../data/'
 	

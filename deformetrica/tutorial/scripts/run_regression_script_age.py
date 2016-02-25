@@ -6,9 +6,9 @@ def main():
 	###        Ensure these paths are correct for your system        ###
 	####################################################################
 	# Make sure to use absolute paths here
-	deformetrica_path = '/home/jfishbaugh/projects/neuro/huntingtons/deformetrica/PHD_ShapeGrant/deformetrica/bin/sparseGeodesicRegression3'
-	data_path = '/home/jfishbaugh/projects/neuro/huntingtons/deformetrica/PHD_ShapeGrant/deformetrica/tutorial/data/'
-	output_data_path = '/home/jfishbaugh/projects/neuro/huntingtons/deformetrica/PHD_ShapeGrant/deformetrica/tutorial/regression/'
+	deformetrica_path = '/home/sci/prasanna/work/git/PHD_ShapeGrant/deformetrica/bin/sparseGeodesicRegression3'
+	data_path = '/home/sci/prasanna/work/git/PHD_ShapeGrant/deformetrica/tutorial/data/'
+	output_data_path = '/home/sci/prasanna/work/git/PHD_ShapeGrant/deformetrica/tutorial/regression/'
 
 	subjects = ['50015', '50352', '50567', '50855', '50983', '51034', '51211', '51706', '51855', '51888', '51909', '52598', '52710', '52850']
 	scalar_param = [['61.66461328', '63.18685832', '64.15605749'], ['61.87268994', '63.93976728'], ['58.09445585', '60.31485284'], ['59.56468172', '60.73100616', '61.5578371', '63.55099247', '64.44900753', '65.65639973'], ['55.2991102', '56.25188227', '57.25119781', '58.30527036', '59.41409993'], ['56.11225188', '57.27036277', '58.05886379'], ['56.10403833', '58.0971937', '59.05270363', '60.07118412'], ['55.84668036', '58.091718', '58.88569473', '59.79466119'], ['58.89664613', '59.89322382', '62.9431896'], ['58.37097878', '60.70910335'], ['54.97878166', '58.02600958', '59.00342231', '59.75085558'], ['57.94661191', '58.92128679', '59.88774812', '60.97193703'], ['59.55920602', '61.60985626'], ['58.90485969', '59.9945243', '60.93360712', '61.89459274', '62.7761807']]

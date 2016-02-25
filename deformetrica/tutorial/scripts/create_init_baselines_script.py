@@ -5,7 +5,7 @@ def main():
 	####################################################################
 	###        Ensure these paths are correct for your system        ###
 	####################################################################
-	align_ellipse_path = '../../utils/bin/MapsEllipsoidWithSource'
+	align_ellipse_path = '../../utils/bin-utils/MapsEllipsoidWithSource'
 	data_path = '../data/'
 	sphere_path = '../../utils/meshes/sphere1280.vtk'
 

@@ -5,8 +5,8 @@ def main():
 	####################################################################
 	###        Ensure these paths are correct for your system        ###
 	####################################################################
-	mcubes_path = '/home/jfishbaugh/software/irtk/mcubes'
-	extractlabel_path = '../../utils/bin/extractlabel'
+	mcubes_path = '/home/sci/prasanna/work/software/irtk/mcubes'
+	extractlabel_path = '../../utils/bin-utils/extractlabel'
 	data_path = '../data/'
 
 	subjects = ['50015', '50352', '50567', '50855', '50983', '51034', '51211', '51706', '51855', '51888', '51909', '52598', '52710', '52850']

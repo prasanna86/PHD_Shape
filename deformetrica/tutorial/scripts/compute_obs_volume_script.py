@@ -31,8 +31,7 @@ def main():
 			for k in range(0, len(seg_names)):
 
 				cur_shape = '%s%s/decimated_surfaces/%s.vtk' %(cur_dir, subject_scans[i][j], seg_names[k])
-				
-				cur_vol_file = '%sdecimated_%s_volume.txt' %(stats_dir, seg_names[k])
+                                cur_vol_file = '%sdecimated_%s_volume.txt' %(stats_dir, seg_names[k])
 	
 				os.system(surf_volume_path + ' ' + cur_shape + ' >> ' + cur_vol_file)
 		

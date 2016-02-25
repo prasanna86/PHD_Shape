@@ -5,7 +5,7 @@ def main():
 	####################################################################
 	###        Ensure these paths are correct for your system        ###
 	####################################################################
-	surfdecimate_path = '../../utils/bin/surfdecimate'
+	surfdecimate_path = '../../utils/bin-utils/surfdecimate'
 	data_path = '../data/'
 
 	subjects = ['50015', '50352', '50567', '50855', '50983', '51034', '51211', '51706', '51855', '51888', '51909', '52598', '52710', '52850']

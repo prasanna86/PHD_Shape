@@ -6,8 +6,8 @@ def main():
 	###        Ensure these paths are correct for your system        ###
 	####################################################################
 	# Make sure to use absolute paths here
-	match_path = '/home/jfishbaugh/projects/neuro/huntingtons/deformetrica/PHD_ShapeGrant/deformetrica/bin/sparseMatching3'
-	data_path = '/home/jfishbaugh/projects/neuro/huntingtons/deformetrica/PHD_ShapeGrant/deformetrica/tutorial/data/'
+	match_path = '/home/sci/prasanna/work/git/PHD_ShapeGrant/deformetrica/bin/sparseMatching3'
+	data_path = '/home/sci/prasanna/work/git/PHD_ShapeGrant/deformetrica/tutorial/data/'
 	
 	subjects = ['50015', '50352', '50567', '50855', '50983', '51034', '51211', '51706', '51855', '51888', '51909', '52598', '52710', '52850']
 	
