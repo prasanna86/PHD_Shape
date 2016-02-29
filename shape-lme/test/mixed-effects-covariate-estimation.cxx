@@ -507,7 +507,7 @@ int main(int argc, char ** argv)
   // reading lpts param file
   ifstream lpts_paramfile, design_file, timepoints_file, shapefile;
   string filename;
-  unsigned int np = 642, nsh = 896, nsub = 321, num_fixed = 10, num_cat = 8;
+  unsigned int np = 642, nsh = 49, nsub = 14, num_fixed = 4, num_cat = 8;
   unsigned int j = 0;
   double px, py, pz, age, g1, g2, g3, sex;
   unsigned int t;
