@@ -16,7 +16,7 @@ MatrixType procrustes(MatrixType & p, MatrixType & q)
 
 void runTests(MatrixType & X, MatrixType & design, TimePointsType & tp, MatrixType & fixed, MatrixType & random)
 {
-  cout << "Estimating params using ME" << endl;
+  // cout << "Estimating params using ME" << endl;
   VectorType expl; expl.zeros(design.n_rows);
   expl = design.col(1);
 
@@ -147,7 +147,7 @@ void runTests(MatrixType & X, MatrixType & design, TimePointsType & tp, MatrixTy
     sigmaDiff = 2 * epsilon;
     Ds_norm_diff = 2 * epsilon;
 
-    cout << "particle, em iter, Ds_new norm, sigma2 = " << i+1 << " " << em << " " << norm(Ds_new, "fro") << " " << sigma2s_new << endl;
+    // cout << "particle, em iter, Ds_new norm, sigma2 = " << i+1 << " " << em << " " << norm(Ds_new, "fro") << " " << sigma2s_new << endl;
   } //endfor all points on shape (x,y & z)
   
   delete [] Vs;
@@ -159,347 +159,11 @@ void runTests(MatrixType & X, MatrixType & design, TimePointsType & tp, MatrixTy
   delete [] residual;
 }
 
-void print_stuff(MatrixType & design, MatrixType & fixed, MatrixType & random)
-{
-  int np = fixed.n_cols / 3, j;
-  int nsub = random.n_cols / (3 * np);
-
-  // output fixed params to file
-  double min_expl = min(design.col(1));
-  double max_expl = max(design.col(1));
-  int step = 10;
-  
-  VectorType control_female_shapes; control_female_shapes.set_size(np * 3);
-  VectorType control_male_shapes; control_male_shapes.set_size(np * 3);
-  VectorType low_female_shapes; low_female_shapes.set_size(np * 3);
-  VectorType low_male_shapes; low_male_shapes.set_size(np * 3);
-  VectorType med_female_shapes; med_female_shapes.set_size(np * 3);
-  VectorType med_male_shapes; med_male_shapes.set_size(np * 3);
-  VectorType high_female_shapes; high_female_shapes.set_size(np * 3);
-  VectorType high_male_shapes; high_male_shapes.set_size(np * 3);
-
-  VectorType control_female_slope; control_female_slope.set_size(np * 3);
-  VectorType control_male_slope; control_male_slope.set_size(np * 3);
-  VectorType low_female_slope; low_female_slope.set_size(np * 3);
-  VectorType low_male_slope; low_male_slope.set_size(np * 3);
-  VectorType med_female_slope; med_female_slope.set_size(np * 3);
-  VectorType med_male_slope; med_male_slope.set_size(np * 3);
-  VectorType high_female_slope; high_female_slope.set_size(np * 3);
-  VectorType high_male_slope; high_male_slope.set_size(np * 3);
-
-  string fname;
-  ofstream out;
-  int counter = 0;
-  
-  control_female_slope = strans(fixed.row(1));
-  low_female_slope = strans(fixed.row(1) + fixed.row(5));
-  med_female_slope = strans(fixed.row(1) + fixed.row(7)); 
-  high_female_slope = strans(fixed.row(1) + fixed.row(9)); 
-
-  control_male_slope = strans(fixed.row(1) + fixed.row(3));
-  low_male_slope = strans(fixed.row(1) + fixed.row(3) + fixed.row(5)); 
-  med_male_slope = strans(fixed.row(1) + fixed.row(3) + fixed.row(7)); 
-  high_male_slope = strans(fixed.row(1) + fixed.row(3) + fixed.row(9)); 
-  
-  for(int i = 0; i < step; i++)
-  {
-    double value = min_expl + static_cast<double>(i) * ((max_expl - min_expl) / static_cast<double>(step - 1));
-    cout << value << endl;
-
-    control_female_shapes = strans(fixed.row(0) + value * fixed.row(1));
-    low_female_shapes = strans((fixed.row(0) + fixed.row(4)) + value * (fixed.row(1) + fixed.row(5)));
-    med_female_shapes = strans((fixed.row(0) + fixed.row(6)) + value * (fixed.row(1) + fixed.row(7))); 
-    high_female_shapes = strans((fixed.row(0) + fixed.row(8)) + value * (fixed.row(1) + fixed.row(9))); 
-
-    control_male_shapes = strans((fixed.row(0) + fixed.row(2)) + value * (fixed.row(1) + fixed.row(3)));
-    low_male_shapes = strans((fixed.row(0) + fixed.row(2) + fixed.row(4)) + value * (fixed.row(1) + fixed.row(3) + fixed.row(5))); 
-    med_male_shapes = strans((fixed.row(0) + fixed.row(2) + fixed.row(6)) + value * (fixed.row(1) + fixed.row(3) + fixed.row(7))); 
-    high_male_shapes = strans((fixed.row(0) + fixed.row(2) + fixed.row(8)) + value * (fixed.row(1) + fixed.row(3) + fixed.row(9))); 
-    
-    // printing control_female_shapes
-    ostringstream ss;
-    ss << i;
-    fname = "control_female" + ss.str() + ".lpts";
-    out.open(fname.c_str());
-    counter = 0;
-    for(j = 0; j < np * 3; j++)
-    {
-      //cout << control_female_shapes(j) << ' ';
-      out << control_female_shapes(j) << ' ';
-      counter++;
-      if(counter == 3)
-      {
-        //cout << endl;
-	out << endl;
-	counter = 0;
-      }
-    }
-    out.close();
-
-    // printing low_female
-    fname = "low_female" + ss.str() + ".lpts";
-    out.open(fname.c_str());
-    counter = 0;
-    for(j = 0; j < np * 3; j++)
-    {
-      out << low_female_shapes[j] << ' ';
-      counter++;
-      if(counter == 3)
-      {
-	out << endl;
-	counter = 0;
-      }
-    }
-
-    out.close();
-
-    // printing med_female
-    fname = "med_female" + ss.str() + ".lpts";
-    out.open(fname.c_str());
-    counter = 0;
-    for(j = 0; j < np * 3; j++)
-    {
-      out << med_female_shapes[j] << ' ';
-      counter++;
-      if(counter == 3)
-      {
-	out << endl;
-	counter = 0;
-      }
-    }
-
-    out.close();
-
-    // printing high_female
-    fname = "high_female" + ss.str() + ".lpts";
-    out.open(fname.c_str());
-    counter = 0;
-    for(j = 0; j < np * 3; j++)
-    {
-      out << high_female_shapes[j] << ' ';
-      counter++;
-      if(counter == 3)
-      {
-	out << endl;
-	counter = 0;
-      }
-    }
-
-    out.close();
-
-    // printing control_male
-    fname = "control_male" + ss.str() + ".lpts";
-    out.open(fname.c_str());
-    counter = 0;
-    for(j = 0; j < np * 3; j++)
-    {
-      out << control_male_shapes[j] << ' ';
-      counter++;
-      if(counter == 3)
-      {
-	out << endl;
-	counter = 0;
-      }
-    }
-
-    out.close();
-
-    // printing low_male
-    fname = "low_male" + ss.str() + ".lpts";
-    out.open(fname.c_str());
-    counter = 0;
-    for(j = 0; j < np * 3; j++)
-    {
-      out << low_male_shapes[j] << ' ';
-      counter++;
-      if(counter == 3)
-      {
-	out << endl;
-	counter = 0;
-      }
-    }
-
-    out.close();
-
-    // printing med_male
-    fname = "med_male" + ss.str() + ".lpts";
-    out.open(fname.c_str());
-    counter = 0;
-    for(j = 0; j < np * 3; j++)
-    {
-      out << med_male_shapes[j] << ' ';
-      counter++;
-      if(counter == 3)
-      {
-	out << endl;
-	counter = 0;
-      }
-    }
-
-    out.close();
-
-    // printing high_male
-    fname = "high_male" + ss.str() + ".lpts";
-    out.open(fname.c_str());
-    counter = 0;
-    for(j = 0; j < np * 3; j++)
-    {
-      out << high_male_shapes[j] << ' ';
-      counter++;
-      if(counter == 3)
-      {
-	out << endl;
-	counter = 0;
-      }
-    }
-    
-    out.close();
-  }
-
-  // printing slopes:
-
-  // control_female_slope
-  fname = "control_female_slope.txt";
-  out.open(fname.c_str());
-  counter = 0;
-  for(j = 0; j < np * 3; j++)
-  {
-    out << control_female_slope[j] << ' ';
-    counter++;
-    if(counter == 3)
-    {
-      out << endl;
-      counter = 0;
-    }
-  }
-
-  out.close();
-
-  // low_female_slope
-  fname = "low_female_slope.txt";
-  out.open(fname.c_str());
-  counter = 0;
-  for(j = 0; j < np * 3; j++)
-  {
-    out << low_female_slope[j] << ' ';
-    counter++;
-    if(counter == 3)
-    {
-      out << endl;
-      counter = 0;
-    }
-  }
-
-  out.close();
-
-  // printing med_female_slope
-  fname = "med_female_slope.txt";
-  out.open(fname.c_str());
-  counter = 0;
-  for(j = 0; j < np * 3; j++)
-  {
-    out << med_female_slope[j] << ' ';
-    counter++;
-    if(counter == 3)
-    {
-      out << endl;
-      counter = 0;
-    }
-  }
-
-  out.close();
-
-  // printing high_female_slope
-  fname = "high_female_slope.txt";
-  out.open(fname.c_str());
-  counter = 0;
-  for(j = 0; j < np * 3; j++)
-  {
-    out << high_female_slope[j] << ' ';
-    counter++;
-    if(counter == 3)
-    {
-      out << endl;
-      counter = 0;
-    }
-  }
-
-  out.close();
-
-  // printing control_male_slope
-  fname = "control_male_slope.txt";
-  out.open(fname.c_str());
-  counter = 0;
-  for(j = 0; j < np * 3; j++)
-  {
-    out << control_male_slope[j] << ' ';
-    counter++;
-    if(counter == 3)
-    {
-      out << endl;
-      counter = 0;
-    }
-  }
-
-  out.close();
-
-  // printing low_male_slope
-  fname = "low_male_slope.txt";
-  out.open(fname.c_str());
-  counter = 0;
-  for(j = 0; j < np * 3; j++)
-  {
-    out << low_male_slope[j] << ' ';
-    counter++;
-    if(counter == 3)
-    {
-      out << endl;
-      counter = 0;
-    }
-  }
-
-  out.close();
-
-  // printing med_male_slope
-  fname = "med_male_slope.txt";
-  out.open(fname.c_str());
-  counter = 0;
-  for(j = 0; j < np * 3; j++)
-  {
-    out << med_male_slope[j] << ' ';
-    counter++;
-    if(counter == 3)
-    {
-      out << endl;
-      counter = 0;
-    }
-  }
-
-  out.close();
-
-  // printing high_male_slope
-  fname = "high_male_slope.txt";
-  out.open(fname.c_str());
-  counter = 0;
-  for(j = 0; j < np * 3; j++)
-  {
-    out << high_male_slope[j] << ' ';
-    counter++;
-    if(counter == 3)
-    {
-      out << endl;
-      counter = 0;
-    }
-  }
-    
-  out.close();
-}
-
 int main(int argc, char ** argv)
 {
-  if(argc != 5)
+  if(argc != 7)
   {
-    cout << "Usage mixed-effects-estimation lpts_paramfile design_file timepoints_file print_stuff (yes: 1, no: 0)"
+    cout << "Usage mixed-effects-estimation lpts_paramfile design_file timepoints_file template_file out_fixed out_random"
 	 << endl;
     return EXIT_FAILURE;
   }
@@ -507,20 +171,67 @@ int main(int argc, char ** argv)
   // reading lpts param file
   ifstream lpts_paramfile, design_file, timepoints_file, shapefile;
   string filename;
-  unsigned int np = 642, nsh = 49, nsub = 14, num_fixed = 4, num_cat = 8;
-  unsigned int j = 0;
-  double px, py, pz, age, g1, g2, g3, sex;
+  double px, py, pz, entry;
   unsigned int t;
+
+  // loading lpts file
+  unsigned int nsh = 0;
+  lpts_paramfile.open(argv[1]);
+  std::string line;
+  while (std::getline(lpts_paramfile, line))
+    ++nsh;
+  lpts_paramfile.close();
+
+  // std::cout << "nsh: " << nsh << "\n";
+
+  // loading design file
+  unsigned int num_fixed = 0;
+  design_file.open(argv[2]);
+  std::getline(design_file, line);
+  std::istringstream iss(line);
+  do
+  {
+    std::string sub;
+    iss >> sub;
+    if (sub.length())
+      ++num_fixed;
+  }
+  while(iss);
+  design_file.close();
+
+  // std::cout << "num_fixed: " << num_fixed << "\n";
+
+  // counting number of subjects from timepts file
+  unsigned int nsub = 0;
+  timepoints_file.open(argv[3]);
+  while (std::getline(timepoints_file, line))
+    ++nsub;
+
+  timepoints_file.close();
+  // std::cout << "nsub: " << nsub << "\n";
+
+  // counting number of particles
+  unsigned int np = 0;
+  lpts_paramfile.open(argv[1]);
+  lpts_paramfile >> filename;
+  shapefile.open(filename.c_str());
+  while (std::getline(shapefile, line))
+    ++np; 
+  // std::cout << "np: " << np << "\n";
+  shapefile.close();
+  lpts_paramfile.close();
+
   MatrixType X, Y; X.zeros(3*np, nsh); Y.zeros(3*np, nsh);
   MatrixType design; design.zeros(nsh, num_fixed);
   TimePointsType tp; tp.set_size(nsub);
 
-  // loading pts file
   lpts_paramfile.open(argv[1]);
+
+  unsigned int j = 0, k = 0;
   while(lpts_paramfile >> filename)
   {
     shapefile.open(filename.c_str());
-    cout << "Reading file: " << filename << endl;
+    // cout << "Reading file: " << filename << endl;
     int i = 0;
     while(shapefile >> px >> py >> pz)
     {
@@ -530,27 +241,26 @@ int main(int argc, char ** argv)
       i += 1;
     }
     shapefile.close();
-    j += 1;
+    ++j;
   }
+
+  lpts_paramfile.close();
 
   // loading design matrix
   j = 0;
   design_file.open(argv[2]);
-  while(design_file >> sex >> g1 >> g2 >> g3 >> age)
+  while(design_file >> entry)
   {
-    design(j, 0) = 1;
-    design(j, 1) = age;
-    design(j, 2) = sex;
-    design(j, 3) = age * sex;
-    design(j, 4) = g1;
-    design(j, 5) = age * g1;
-    design(j, 6) = g2;
-    design(j, 7) = age * g2;
-    design(j, 8) = g3;
-    design(j, 9) = age * g3;
-
-    j += 1;
+    design(j, k) = entry;
+    ++k;
+    if(k == num_fixed)
+    {
+      ++j;
+      k = 0;
+    }
   }
+
+  design_file.close();
 
   // loading timepoints
   j = 0;
@@ -561,7 +271,7 @@ int main(int argc, char ** argv)
     j += 1;
   }
 
-  j = 0;
+  timepoints_file.close();
 
   // parameters of interest
   MatrixType fixed; // slopes + intercepts for all points
@@ -571,8 +281,8 @@ int main(int argc, char ** argv)
 
   // align shapes to template
   MatrixType template_shape; template_shape.zeros(3, np);
-  // load in a nice template shape (control female)...
-  shapefile.open("template_control_female.lpts");
+  // load in a nice template shape
+  shapefile.open(argv[4]);
   j = 0;
   while(shapefile >> px >> py >> pz)
   {
@@ -581,7 +291,10 @@ int main(int argc, char ** argv)
     template_shape(2, j) = pz;
     j += 1;
   }
-  
+  shapefile.close();
+
+  // cout << "template = " << endl << strans(template_shape) << endl;
+
   // removing translations from template
   VectorType mean_xyz; mean_xyz.zeros(3); 
   for(int k = 0; k < np; k++)
@@ -593,7 +306,6 @@ int main(int argc, char ** argv)
     template_shape.col(k) = template_shape.col(k) - mean_xyz;
 
   j = 0; // reinitializing
-  shapefile.close();
 
   // ...and align everything to the template
   for(int k = 0; k < nsh; k++)
@@ -622,8 +334,28 @@ int main(int argc, char ** argv)
   // estimate model with aligned shapes
   runTests(Y, design, tp, fixed, random);
 
-  if(atoi(argv[4]) == 1)
-    print_stuff(design, fixed, random);
+  // output fixed params
+  ofstream out;
+  out.open(argv[5]);
+ 
+  for(int i = 0; i < np * 3; i++)
+  {
+    for(int j = 0; j < num_fixed; j++)
+      out << fixed(j, i) << " "; 
+    out << endl;
+  }
 
+  out.close();
+  // output random params
+  out.open(argv[6]);
+
+  for(int i = 0; i < nsub * np * 3; i++)
+  {
+    for(int j = 0; j < 2; j++)
+      out << random(j, i) << " ";
+    out << endl;
+  }
+
+  out.close();
   return EXIT_SUCCESS;
 }
