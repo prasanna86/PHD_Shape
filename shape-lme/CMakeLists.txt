@@ -50,8 +50,8 @@ ENDIF(BUILD_SHARED_LIBS)
 
 # == What to Build ==
 IF(BUILD_TESTING)
-ADD_EXECUTABLE(hypothesis-testing test/hypothesis-testing.cxx)
-TARGET_LINK_LIBRARIES(hypothesis-testing ${ShapeLME})
+ADD_EXECUTABLE(hypothesis-testing-tutorial test/hypothesis-testing-tutorial.cxx)
+TARGET_LINK_LIBRARIES(hypothesis-testing-tutorial ${ShapeLME})
 
 ADD_EXECUTABLE(mixed-effects-covariate-estimation test/mixed-effects-covariate-estimation.cxx)
 TARGET_LINK_LIBRARIES(mixed-effects-covariate-estimation ${ShapeLME})
