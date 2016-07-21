@@ -185,7 +185,7 @@ int main(int argc, char ** argv)
 {
   if(argc != 9)
   {
-    cout << "Usage hypothesis-testing lpts_paramfile design_file timepoints_file template" 
+    cout << "Usage hypothesis-testing-tutorial lpts_paramfile design_file timepoints_file template" 
 	 << " fixed random num_perm out_file"
 	 << endl;
     return EXIT_FAILURE;
