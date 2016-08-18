@@ -1,4 +1,4 @@
-# PHD_ShapGrant
+# PHD_Shape
 A private repository for coordinating efforts with the Utah/NYU groups
 
 ### Deformetrica Build Instruction
