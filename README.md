@@ -9,4 +9,4 @@ A private repository for coordinating efforts with the Utah/NYU groups
 2. Build VTK
 3. Build Armadillo
   * http://arma.sourceforge.net/
-4. Build Deformatrica agains above three. 
+4. Build Deformetrica agains above three. 
