@@ -6,8 +6,8 @@ def main():
 	####################################################################
 	###        Ensure these paths are correct for your system        ###
 	####################################################################
-	input_path = '/home/sci/prasanna/work/git/PHD_ShapeGrant/deformetrica/tutorial/shape_lpts_for_stats/'
-        output_path = '/home/sci/prasanna/work/git/PHD_ShapeGrant/deformetrica/tutorial/mixed_effects_results/'
+	input_path = '/home/sci/prasanna/work/git/PHD_ShapeGrant/tutorial/shape_lpts_for_stats/'
+        output_path = '/home/sci/prasanna/work/git/PHD_ShapeGrant/tutorial/mixed_effects_results/'
         me_test_path = '/home/sci/prasanna/work/git/PHD_ShapeGrant/shape-lme/bin/mixed-effects-covariate-estimation'
 
 	if not (os.path.isdir(output_path)):

@@ -6,9 +6,9 @@ def main():
 	####################################################################
 	###        Ensure these paths are correct for your system        ###
 	####################################################################
-        input_path = '/home/sci/prasanna/work/git/PHD_ShapeGrant/deformetrica/tutorial/mixed_effects_results/'
-        output_path = '/home/sci/prasanna/work/git/PHD_ShapeGrant/deformetrica/tutorial/output_shape_seq_vtk/'
-        vtk_template_path = '/home/sci/prasanna/work/git/PHD_ShapeGrant/deformetrica/tutorial/reg_at_obs_time_pts/50855/'
+        input_path = '/home/sci/prasanna/work/git/PHD_ShapeGrant/tutorial/mixed_effects_results/'
+        output_path = '/home/sci/prasanna/work/git/PHD_ShapeGrant/tutorial/output_shape_seq_vtk/'
+        vtk_template_path = '/home/sci/prasanna/work/git/PHD_ShapeGrant/tutorial/reg_at_obs_time_pts/50855/'
 
 	if not (os.path.isdir(output_path)):
 		os.system('mkdir ' + output_path)

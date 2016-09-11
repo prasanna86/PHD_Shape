@@ -7,7 +7,7 @@ def main():
 	####################################################################
 	# Make sure to use absolute paths here
 	match_path = '/home/sci/prasanna/work/git/PHD_ShapeGrant/deformetrica/bin/sparseMatching3'
-	data_path = '/home/sci/prasanna/work/git/PHD_ShapeGrant/deformetrica/tutorial/data/'
+	data_path = '/home/sci/prasanna/work/git/PHD_ShapeGrant/tutorial/data/'
 	
 	subjects = ['50015', '50352', '50567', '50855', '50983', '51034', '51211', '51706', '51855', '51888', '51909', '52598', '52710', '52850']
 	
