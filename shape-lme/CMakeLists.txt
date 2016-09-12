@@ -27,17 +27,10 @@ ELSE()
   message("ARMADILLO NOT FOUND")
 ENDIF()
 
-# == Optional subdirectories to build ==
-OPTION(BUILD_TESTING "Build tests?" ON)
-
 # == Setup Include Directories ==
 LIST(APPEND ShapeLME_INCLUDE_DIRECTORIES
   ${ShapeLME_SOURCE_DIR}/include/)
 INCLUDE_DIRECTORIES(${ShapeLME_INCLUDE_DIRECTORIES})
-
-SET(ShapeLME
-  ${ARMADILLO_LIBRARIES})
-LINK_DIRECTORIES(${ShapeLME})
 
 # == Shared Library Option ==
 MARK_AS_ADVANCED(BUILD_SHARED_LIBS)
@@ -49,10 +42,9 @@ ELSE(BUILD_SHARED_LIBS)
 ENDIF(BUILD_SHARED_LIBS)
 
 # == What to Build ==
-IF(BUILD_TESTING)
-ADD_EXECUTABLE(hypothesis-testing-tutorial test/hypothesis-testing-tutorial.cxx)
-TARGET_LINK_LIBRARIES(hypothesis-testing-tutorial ${ShapeLME})
+ADD_EXECUTABLE(hypothesis-testing-tutorial src/hypothesis-testing-tutorial.cxx)
+TARGET_LINK_LIBRARIES(hypothesis-testing-tutorial ${ARMADILLO_LIBRARIES})
 
-ADD_EXECUTABLE(mixed-effects-covariate-estimation test/mixed-effects-covariate-estimation.cxx)
-TARGET_LINK_LIBRARIES(mixed-effects-covariate-estimation ${ShapeLME})
-ENDIF(BUILD_TESTING)
+ADD_EXECUTABLE(mixed-effects-covariate-estimation src/mixed-effects-covariate-estimation.cxx) 
+TARGET_LINK_LIBRARIES(mixed-effects-covariate-estimation ${ARMADILLO_LIBRARIES})
+
