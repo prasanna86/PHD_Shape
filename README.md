@@ -12,6 +12,7 @@ A private repository for coordinating efforts with the Utah/NYU groups
 4. Build Deformetrica against above three.
 
 ### ShapeLME Build Instruction 
-1. Create and cd into a \textbf{build}
-directory in the \textbf{shape-lme} package part of the tutorial.
-2. Run \textbf{ccmake ../} and \textbf{make}
+Dependencies: Armadillo (already built for Deformetrica)
+1. mkdir shape-lme/bin and cd into it.
+2. Run ccmake ../ and follow instructions.
+3. Run make
