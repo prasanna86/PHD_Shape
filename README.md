@@ -13,6 +13,7 @@ A private repository for coordinating efforts with the Utah/NYU groups
 
 ### ShapeLME Build Instruction 
 Dependencies: Armadillo (already built for Deformetrica)
-1. mkdir shape-lme/bin and cd into it.
-2. Run ccmake ../ and follow instructions.
-3. Run make
+
+* mkdir shape-lme/bin and cd into it.
+* Run ccmake ../ and follow instructions.
+* Run make
