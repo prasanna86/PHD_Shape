@@ -1,7 +1,7 @@
 # PHD_Shape
 A private repository for coordinating efforts with the Utah/NYU groups
 
-### Deformetrica Build Instruction
+### Deformetrica Build Instructions
 1. Build ITK
   * Turn on 'ITK_WRAP' 
   * Turn on 'FFTWD'
@@ -11,7 +11,7 @@ A private repository for coordinating efforts with the Utah/NYU groups
   * http://arma.sourceforge.net/
 4. Build Deformetrica against above three.
 
-### ShapeLME Build Instruction 
+### ShapeLME Build Instructions 
 Dependencies: Armadillo (already built for Deformetrica)
 
 * mkdir shape-lme/bin and cd into it.
