@@ -1,26 +1,35 @@
 import os
+import sys
 
 def main():
 
   ####################################################################
   ###        Ensure these paths are correct for your system        ###
   ####################################################################
-  # Make sure to use absolute paths here
   deformetrica_path = '../../deformetrica/bin/sparseGeodesicRegression3'
   data_path = '../data/'
   output_data_path = '../regression/'
+
+  if (not os.path.isfile(deformetrica_path)):
+    print "\nError: sparseGeodesicRegression3 binary not found. Edit this script and ensure the path is correct.\n"
+    sys.exit(1)
 
   subjects = ['50015', '50352', '50567', '50855', '50983', '51034', '51211', '51706', '51855', '51888', '51909', '52598', '52710', '52850']
   scalar_param = [['61.66461328', '63.18685832', '64.15605749'], ['61.87268994', '63.93976728'], ['58.09445585', '60.31485284'], ['59.56468172', '60.73100616', '61.5578371', '63.55099247', '64.44900753', '65.65639973'], ['55.2991102', '56.25188227', '57.25119781', '58.30527036', '59.41409993'], ['56.11225188', '57.27036277', '58.05886379'], ['56.10403833', '58.0971937', '59.05270363', '60.07118412'], ['55.84668036', '58.091718', '58.88569473', '59.79466119'], ['58.89664613', '59.89322382', '62.9431896'], ['58.37097878', '60.70910335'], ['54.97878166', '58.02600958', '59.00342231', '59.75085558'], ['57.94661191', '58.92128679', '59.88774812', '60.97193703'], ['59.55920602', '61.60985626'], ['58.90485969', '59.9945243', '60.93360712', '61.89459274', '62.7761807']]
   seg_names = ['right_caudate', 'left_caudate', 'right_putamen', 'left_putamen']
   
+  # Get absolute paths
+  deformetrica_path = os.path.abspath(deformetrica_path)
+  data_path = os.path.abspath(data_path)
+  output_data_path = os.path.abspath(output_data_path)
+
   for i in range(0, len(subjects)): 
     
     print '/======================================================='
     print '| Working on subject ' + subjects[i]
     print '\======================================================='
 
-    cur_regression_dir = output_data_path + subjects[i] + '/'
+    cur_regression_dir = output_data_path + "/" + subjects[i] + '/'
     
     if (os.path.isfile(cur_regression_dir + 'Regression_baseline_init_baseline_left_caudate_trajectory___t_0.vtk')):
       print 'Regression already complete, skipping this subject...'
@@ -29,16 +38,27 @@ def main():
     # Create the directory if needed
     if not (os.path.isdir(cur_regression_dir)):
       os.makedirs(cur_regression_dir)
+
+    ready_for_regression = True
     
     # Copy over the initial baseline shapes
-    path_to_data = data_path + subjects[i] + '/time_series/decimated_aligned_surfaces/'
+    path_to_data = data_path + "/" + subjects[i] + '/time_series/decimated_aligned_surfaces/'
     # The different shapes to copy over
     for k in range(0, len(seg_names)):
         
       data_in = '%sAtlas_template_init_baseline_%s_to_subject_0__t_9.vtk' %(path_to_data, seg_names[k])
       data_out = '%sinit_baseline_%s.vtk' %(cur_regression_dir, seg_names[k])
       
+      if not (os.path.isfile(data_in)):
+        
+        ready_for_regression = False
+        break
+
       os.system('cp ' + data_in + ' ' + data_out)
+
+    if (ready_for_regression == False):
+      print "One or more baseline shapes are not available, skipping this subject...\n"
+      continue
 
     path_to_data = data_path + subjects[i] + '/time_series/decimated_aligned_surfaces/'
 
@@ -121,6 +141,8 @@ def main():
     os.chdir(cur_regression_dir)
     os.system('chmod 777 reg_call')
     os.system('./reg_call')    
+
+  print "\nNOTE: These processes are running in the background. Check the status of sparseGeodesicRegression3 using a task manager such as top.\n"
 
 if __name__ == '__main__':
   main()

@@ -33,7 +33,7 @@ def main():
     print "\======================================================="
 
     num_cur_timepts = len(times[i])
-     min_time = float(times[i][0])
+    min_time = float(times[i][0])
     time_range = float(times[i][num_cur_timepts-1]) - float(times[i][0])
     timepts_to_copy = []
   
