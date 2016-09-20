@@ -113,7 +113,8 @@ DeformableObjectReader<TScalar, Dimension>
 	
 	typedef GridFunctions<TScalar, Dimension> GridFunctionsType;
 
-	const char* ObjectType = m_ParamObject->GetDeformableObjectType().c_str();
+	std::string theObject = m_ParamObject->GetDeformableObjectType();
+	const char* ObjectType = theObject.c_str();
 
 	if (itksys::SystemTools::Strucmp(ObjectType,"Landmark") == 0)
 	{
