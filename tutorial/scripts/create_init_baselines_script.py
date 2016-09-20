@@ -1,13 +1,18 @@
 import os
+import sys
 
 def main():
 
   ####################################################################
   ###        Ensure these paths are correct for your system        ###
   ####################################################################
-  align_ellipse_path = '../../deformetrica/utils/bin-apps/MapsEllipsoidWithSource'
+  align_ellipse_path = '../../deformetrica/bin-utils/MapsEllipsoidWithSource'
   data_path = '../data/'
   sphere_path = '../../deformetrica/utils/meshes/sphere1280.vtk'
+
+  if (not os.path.isfile(align_ellipse_path)):
+    print "\nError: MapsEllipsoidWithSource binary not found. Edit this script and ensure the path is correct.\n"
+    sys.exit(1)
 
   subjects = ['50015', '50352', '50567', '50855', '50983', '51034', '51211', '51706', '51855', '51888', '51909', '52598', '52710', '52850']
   

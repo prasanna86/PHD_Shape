@@ -1,17 +1,25 @@
 import os
+import sys
 
 def main():
 
   ####################################################################
   ###        Ensure these paths are correct for your system        ###
   ####################################################################
-  # Make sure to use absolute paths here
   match_path = '../../deformetrica/bin/sparseMatching3'
   data_path = '../data/'
+
+  if (not os.path.isfile(match_path)):
+    print "\nError: sparseMatching3 binary not found. Edit this script and ensure the path is correct.\n"
+    sys.exit(1)
   
   subjects = ['50015', '50352', '50567', '50855', '50983', '51034', '51211', '51706', '51855', '51888', '51909', '52598', '52710', '52850']
   
   seg_names = ['right_caudate', 'left_caudate', 'right_putamen', 'left_putamen']
+
+  # Get absolute paths
+  match_path = os.path.abspath(match_path)
+  data_path = os.path.abspath(data_path)
 
   for i in range(0, len(subjects)): 
     
@@ -19,7 +27,7 @@ def main():
     print '| Working on subject ' + subjects[i]
     print '\======================================================='
   
-    cur_dir = '%s%s/time_series/decimated_aligned_surfaces/' %(data_path, subjects[i])
+    cur_dir = '%s/%s/time_series/decimated_aligned_surfaces/' %(data_path, subjects[i])
 
     for j in range(0, len(seg_names)):
 
@@ -80,7 +88,9 @@ def main():
       os.system('chmod 777 match_call_' + seg_names[j])
       os.system('./match_call_' + seg_names[j])
 
-        
+  print "\nNOTE: These processes are running in the background. Check the status of sparseMatching3 using a task manager such as top.\n"        
+
+
 if __name__ == '__main__':
   main()
 
