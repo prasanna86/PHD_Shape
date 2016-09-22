@@ -8,7 +8,7 @@ def main():
   ####################################################################
   ###        Ensure these paths are correct for your system        ###
   ####################################################################
-  surf_volume_path = '../../deformetrica/bin-utils/surfvolume'
+  surf_volume_path = '../../bin/deformetrica/utils/surfvolume'
   data_path = '../data/'
 
   if (not os.path.isfile(surf_volume_path)):

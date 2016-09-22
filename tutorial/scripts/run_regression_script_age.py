@@ -6,7 +6,7 @@ def main():
   ####################################################################
   ###        Ensure these paths are correct for your system        ###
   ####################################################################
-  deformetrica_path = '../../deformetrica/bin/sparseGeodesicRegression3'
+  deformetrica_path = '../../bin/deformetrica/app/sparseGeodesicRegression3'
   data_path = '../data/'
   output_data_path = '../regression/'
 

@@ -8,7 +8,7 @@ def main():
   ####################################################################
   ###        Ensure these paths are correct for your system        ###
   ####################################################################
-  surf_volume_path = '../../deformetrica/bin-utils/surfvolume'
+  surf_volume_path = '../../bin/deformetrica/utils/surfvolume'
   regression_path = '../regression/'
   
   if (not os.path.isfile(surf_volume_path)):

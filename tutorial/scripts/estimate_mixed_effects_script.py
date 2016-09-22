@@ -8,7 +8,7 @@ def main():
   ####################################################################
   input_path = '../shape_lpts_for_stats/'
   output_path = '../mixed_effects_results/'
-  me_test_path = '../../shape-lme/bin/mixed-effects-covariate-estimation'
+  me_test_path = '../../bin/shape-lme/mixed-effects-covariate-estimation'
 
   if not (os.path.isdir(output_path)):
     os.system('mkdir ' + output_path)

@@ -7,7 +7,7 @@ def main():
   ###        Ensure these paths are correct for your system        ###
   ####################################################################
   mcubes_path = '/path/to/irtk/mcubes'
-  extractlabel_path = '../../deformetrica/bin-utils/extractlabel'
+  extractlabel_path = '../../bin/deformetrica/utils/extractlabel'
   data_path = '../data/'
 
   if (not os.path.isfile(mcubes_path)):

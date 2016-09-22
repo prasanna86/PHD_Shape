@@ -6,7 +6,7 @@ def main():
   ####################################################################
   ###        Ensure these paths are correct for your system        ###
   ####################################################################
-  surftransform_path = '../../deformetrica/bin-utils/surftransform'
+  surftransform_path = '../../bin/deformetrica/utils/surftransform'
   data_path = '../data/'
 
   if (not os.path.isfile(surftransform_path)):

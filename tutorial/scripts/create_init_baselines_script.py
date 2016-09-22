@@ -6,7 +6,7 @@ def main():
   ####################################################################
   ###        Ensure these paths are correct for your system        ###
   ####################################################################
-  align_ellipse_path = '../../deformetrica/bin-utils/MapsEllipsoidWithSource'
+  align_ellipse_path = '../../bin/deformetrica/utils/MapsEllipsoidWithSource'
   data_path = '../data/'
   sphere_path = '../../deformetrica/utils/meshes/sphere1280.vtk'
 

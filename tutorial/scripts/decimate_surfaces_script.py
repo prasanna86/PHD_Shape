@@ -6,7 +6,7 @@ def main():
   ####################################################################
   ###        Ensure these paths are correct for your system        ###
   ####################################################################
-  surfdecimate_path = '../../deformetrica/bin-utils/surfdecimate'
+  surfdecimate_path = '../../bin/deformetrica/utils/surfdecimate'
   data_path = '../data/'
 
   if (not os.path.isfile(surfdecimate_path)):

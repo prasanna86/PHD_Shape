@@ -7,7 +7,7 @@ def main():
   ###        Ensure these paths are correct for your system        ###
   ####################################################################
   io_path = '../mixed_effects_results/'
-  hypothesis_test_path = '../../shape-lme/bin/hypothesis-testing-tutorial'
+  hypothesis_test_path = '../../bin/shape-lme/hypothesis-testing-tutorial'
   template_file_dir = '../shape_lpts_for_stats/50855/'
 
   subjects = ['50015', '50352', '50567', '50855', '50983', '51034', '51211', '51706', '51855', '51888', '51909', '52598', '52710', '52850']

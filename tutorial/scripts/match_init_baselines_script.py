@@ -6,7 +6,7 @@ def main():
   ####################################################################
   ###        Ensure these paths are correct for your system        ###
   ####################################################################
-  match_path = '../../deformetrica/bin/sparseMatching3'
+  match_path = '../../bin/deformetrica/app/sparseMatching3'
   data_path = '../data/'
 
   if (not os.path.isfile(match_path)):
