@@ -22,10 +22,11 @@ using namespace std;
 typedef double ScalarType;
 
 typedef Col<ScalarType> ScalarListType;
+typedef Col<unsigned int> IntListType;
 typedef Mat<ScalarType> MatrixType;
 typedef Col<ScalarType> VectorType;
 typedef Row<ScalarType> RowVectorType;
 
-typedef Col<unsigned int> TimePointsType;
+typedef vector<unsigned int> TimePointsType;
 
 #endif

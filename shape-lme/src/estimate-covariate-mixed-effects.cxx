@@ -2,27 +2,6 @@
 #include <fstream>
 #include <iostream>
 
-typedef vector<MatrixType> MatListType;
-
-// permute function
-void permute(Col<unsigned int> & x)
-{
-  unsigned int i, j, sz;
-  unsigned int swapTemp;
-  double unifRand;
-
-  sz = x.size();
-  for(i = 0; i < sz - 1; i++)
-  {
-    unifRand = static_cast<double>(rand()) / static_cast<double>(RAND_MAX);
-    j = static_cast<unsigned int>(static_cast<double>(sz - i) * unifRand) + i;
-
-    swapTemp = x[i];
-    x[i] = x[j];
-    x[j] = swapTemp;
-  }
-}
-
 MatrixType procrustes(MatrixType & p, MatrixType & q)
 {
   MatrixType m = p * strans(q);
@@ -35,10 +14,12 @@ MatrixType procrustes(MatrixType & p, MatrixType & q)
   return qRot;
 }
 
-void runTests(MatrixType & X, MatrixType & design, TimePointsType & tp, 
-	      MatrixType & fixed, MatrixType & random)
+void runTests(MatrixType & X, MatrixType & design, 
+	      TimePointsType & tp, 
+	      MatrixType & fixed, 
+	      MatrixType & random)
 {
-  //cout << "Estimating params using ME" << endl;
+  // cout << "Estimating params using ME" << endl;
   VectorType expl; expl.zeros(design.n_rows);
   expl = design.col(1);
 
@@ -104,8 +85,8 @@ void runTests(MatrixType & X, MatrixType & design, TimePointsType & tp,
   double sigma2s = 0, sigma2s_new = 1; // variance of error
   MatrixType Ds, Ds_new; // covariance matrix of random parameters (2x2)
   Ds.zeros(2,2); Ds_new.eye(2,2);
-  double epsilon1 = 1.0e-09, epsilon2 = 1.0e-05;
-  double sigmaDiff = 2 * epsilon1, Ds_norm_diff = 2 * epsilon2;
+  double epsilon = 1.0e-05;
+  double sigmaDiff = 2 * epsilon, Ds_norm_diff = 2 * epsilon;
   unsigned int em = 0;
 
   for(int i = 0; i < nr; i++) //for all points (x,y,z coordinates)
@@ -123,7 +104,7 @@ void runTests(MatrixType & X, MatrixType & design, TimePointsType & tp,
       obs_thus_far += tp[k];
     }
 
-    while(em < 500 && (sigmaDiff > epsilon1 || Ds_norm_diff > epsilon2)) // EM iterations
+    while(em < 500 && (sigmaDiff > epsilon || Ds_norm_diff > epsilon)) // EM iterations
     {
       sigma2s = sigma2s_new;
       Ds = Ds_new;
@@ -166,10 +147,8 @@ void runTests(MatrixType & X, MatrixType & design, TimePointsType & tp,
       em += 1;
     } //endfor EM iterations
 
-    sigmaDiff = 2 * epsilon1;
-    Ds_norm_diff = 2 * epsilon2;
-
-    //cout << "particle, em iter, Ds_new norm, sigma2 = " << i+1 << " " << em << " " << norm(Ds_new, "fro") << " " << sigma2s_new << endl;
+    sigmaDiff = 2 * epsilon;
+    Ds_norm_diff = 2 * epsilon;
   } //endfor all points on shape (x,y & z)
   
   delete [] Vs;
@@ -183,15 +162,13 @@ void runTests(MatrixType & X, MatrixType & design, TimePointsType & tp,
 
 int main(int argc, char ** argv)
 {
-  if(argc != 7)
+  if(argc != 5)
   {
-    cout << "Usage src/hypothesis-testing-tutorial param_file template_file" 
-	 << "est_fixed est_random num_perm out_file"
-	 << endl;
+    cout << "Usage: test/estimate-covariate-mixed-effects param_file " 
+	 << "template_file est_fixed est_random"
+  	 << endl;
     return EXIT_FAILURE;
   }
-
-  ofstream out_file; out_file.open(argv[6]);
 
   ifstream input_file, shape_file; string param_line, shape_line;
   unsigned int np = 0, nsh = 0;
@@ -207,11 +184,11 @@ int main(int argc, char ** argv)
     ++np;
   shape_file.close();
 
-  out_file << "np, nsh = " << np << " " << nsh << endl;
+  cout << "np, nsh = " << np << " " << nsh << endl;
 
   // variables to read param file
   string filename;
-  unsigned int nsub = 0, num_fixed = 2, t = 0, obs_thus_far = 0;
+  unsigned int nsub = 0, num_fixed = 2, t = 0;
   ScalarType age, px, py, pz;
   ScalarType gid, sex, subj_num = 50015, prev_subj_num;
 
@@ -220,7 +197,7 @@ int main(int argc, char ** argv)
   ScalarListType groupIDs; groupIDs.resize(nsh);
   ScalarListType sex_of_subjs; sex_of_subjs.resize(nsh);
   ScalarListType ages; ages.resize(nsh);
-  TimePointsType time_pts; VectorType subj_group_ids, nsh_thus_far;
+  TimePointsType time_pts;
   MatrixType X; X.zeros(3*np, nsh);
 
   // open param file again
@@ -234,8 +211,8 @@ int main(int argc, char ** argv)
   {
     ss.str(param_line);
     ss >> subj_num >> gid >> sex >> age >> filename;
-    out_file << subj_num << " " << gid << " " << sex 
-	     << " " << age << " " << filename << endl;
+    cout << subj_num << " " << gid << " " << sex 
+	 << " " << age << " " << filename << endl;
     
     subj_nums[j] = subj_num;
     groupIDs[j] = gid;
@@ -244,7 +221,7 @@ int main(int argc, char ** argv)
 
     // opening points file
     shape_file.open(filename.c_str());
-    out_file << "Reading file: " << filename << endl;
+    cout << "Reading file: " << filename << endl;
     i = 0;
     while(getline(shape_file, shape_line))
     {
@@ -264,13 +241,7 @@ int main(int argc, char ** argv)
       ++t;
     else
     {
-      time_pts.push_back(t);
-      obs_thus_far += t;
-      ++nsub;
-      subj_group_ids.resize(nsub);
-      subj_group_ids[nsub] = static_cast<unsigned int>(gid);
-      nsh_thus_far[nsub] = obs_thus_far; 
-      
+      time_pts.push_back(t); ++nsub;
       // re-intializing
       t = 0;
     }
@@ -280,12 +251,8 @@ int main(int argc, char ** argv)
   }
 
   // if file ends, update timepoints with last subject
-  time_pts.push_back(t); ++nsub; obs_thus_far += t;
-  subj_group_ids.resize(nsub);
-  subj_group_ids[nsub] = static_cast<unsigned int>(gid);
-  nsh_thus_far[nsub] = obs_thus_far; 
-  
-  out_file << "number of subjects = " << nsub << endl;
+  time_pts.push_back(t); ++nsub;
+  cout << "number of subjects = " << nsub << endl;
 
   // deciding number of fixed effects parameters based on categories
   ScalarListType sexes = unique(sex_of_subjs);
@@ -298,7 +265,7 @@ int main(int argc, char ** argv)
   if(sexes.size() != 1)
     num_fixed += 2 * (sexes.size() - 1);
 
-  out_file << "number of fixed effects = " << num_fixed << endl;
+  cout << "number of fixed effects = " << num_fixed << endl;
 
   // creating design matrix
   MatrixType design; design.zeros(nsh, num_fixed);
@@ -331,7 +298,7 @@ int main(int argc, char ** argv)
     design.col(num_fixed-1) = sex_of_subjs % ages;
   }
 
-  out_file << "design = " << design << endl;
+  cout << "design = " << design << endl;
  
   // align shapes to template
   MatrixType template_shape; template_shape.zeros(3, np);
@@ -346,7 +313,7 @@ int main(int argc, char ** argv)
   }
   shape_file.close();
 
-  out_file << "template = " << endl << strans(template_shape) << endl;
+  cout << "template = " << endl << strans(template_shape) << endl;
 
   // removing translations from template
   VectorType mean_xyz; mean_xyz.zeros(3); 
@@ -415,78 +382,6 @@ int main(int argc, char ** argv)
   }
 
   out.close();
-
-  // ------------ Hypothesis testing: control vs hd --------------
-  int numPermutes = atoi(argv[5]);
-
-  double origTestStat_int = norm(fixed.row(2), "fro");
-  double origTestStat_slope = norm(fixed.row(3), "fro");
-  out_file << "orig test stat = " << origTestStat_int 
-	   << " " << origTestStat_slope << endl;
-
-  uvec ctrl = find(subj_group_ids == 0);
-  uvec hd = find(subj_group_ids == 1);
-
-  Col<unsigned int> x; x.zeros(ctrl.size() + hd.size());
-  for(i = 0; i < x.size(); i++)
-  {
-    if(i < ctrl.size())
-      x[i] = ctrl[i];
-    else
-      x[i] = hd[i - ctrl.size()];
-  }
-
-  unsigned int numBelow_int = 0, numBelow_slope = 0;
-  MatrixType new_fixed, new_random;
-  new_fixed.set_size(num_fixed, 3 * np);
-  new_random.set_size(2, 3 * np * nsub);
-
-  srand(time(NULL));
-
-  for(i = 0; i < numPermutes; i++)
-  {
-    permute(x);
-    MatrixType new_design; new_design.zeros(nsh, num_fixed);
-    new_design = design;
-
-    for(j = 0; j < ctrl.size(); j++)
-    {
-      for(int k = 0; k < time_pts[x[j]]; k++)
-      {
-	new_design(nsh_thus_far(x[j]) + k, 2) = 0;
-	new_design(nsh_thus_far(x[j]) + k, 3) = 0;
-      }
-    }
-
-    for(j = ctrl.size(); j < x.size(); j++)
-    {
-      for(int k = 0; k < time_pts[x[j]]; k++)
-      {
-	new_design(nsh_thus_far(x[j]) + k, 2) = 1;
-	new_design(nsh_thus_far(x[j]) + k, 3) = new_design(nsh_thus_far(x[j]) + k, 1);
-      }
-    }
-  
-    runTests(Y, new_design, time_pts, new_fixed, new_random);
-    double testStat_int = norm(new_fixed.row(2), "fro");
-    double testStat_slope = norm(new_fixed.row(3), "fro");
-
-    // intercept
-    if(testStat_int < origTestStat_int)
-      numBelow_int++;
-    out_file << i << ": Test stat, orig (int) = " << testStat_int << "\t" << origTestStat_int << "\t"
-	    << 1 - ((double) numBelow_int / (double)(i + 1)) << endl;
-
-    // slope
-    if(testStat_slope < origTestStat_slope)
-      numBelow_slope++;
-    out_file << i << ": Test stat, orig (slope) = " << testStat_slope << "\t" << origTestStat_slope << "\t"
-	    << 1 - ((double) numBelow_slope / (double)(i + 1)) << endl;
-  }
-
-  out_file << "p value (int) = " << 1 - ((double)(numBelow_int) / numPermutes) << endl;
-  out_file << "p value (slope) = " << 1 - ((double)(numBelow_slope) / numPermutes) << endl;
-  out_file.close();
 
   return EXIT_SUCCESS;
 }
