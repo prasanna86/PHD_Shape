@@ -299,13 +299,14 @@ int main(int argc, char ** argv)
   }
 
   cout << "design = " << design << endl;
- 
+
   // align shapes to template
   MatrixType template_shape; template_shape.zeros(3, np);
   shape_file.open(argv[2]);
   i = 0;
   while(shape_file >> px >> py >> pz)
   {
+    cout << px << " " << py << " " << pz << endl;
     template_shape(0, i) = px;
     template_shape(1, i) = py;
     template_shape(2, i) = pz;
@@ -325,6 +326,9 @@ int main(int argc, char ** argv)
   for(i = 0; i < np; i++)
     template_shape.col(i) = template_shape.col(i) - mean_xyz;
 
+  // // removing scale
+  // template_shape /= norm(template_shape, "fro");
+
   MatrixType Y; Y.zeros(3*np, nsh);
   // ...and align everything to the template
   for(j = 0; j < nsh; j++)
@@ -341,6 +345,9 @@ int main(int argc, char ** argv)
 
     for(i = 0; i < np; i++)
       current_shape.col(i) = current_shape.col(i) - mean_xyz;
+
+    // // removing scale
+    // current_shape /= norm(current_shape, "fro");
 
     // procrustes align to template
     current_shape = procrustes(template_shape, current_shape);

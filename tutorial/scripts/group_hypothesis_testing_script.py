@@ -24,7 +24,7 @@ def main():
     print "| Working on the " + struct[k]
     print "\======================================================="
     
-    param_file = '%s%s_param_file.txt' %(input_path, segs[k])
+    param_file = '%s%sparam_file.txt' %(input_path, segs[k])
     cur_io_dir = output_path + struct[k] + '/'
     # Create the output directory if needed
     if not (os.path.isdir(cur_io_dir)):
@@ -33,7 +33,7 @@ def main():
     # Create the lpts_file
     fixed = '%sfixed_effects_%s.txt' %(cur_io_dir, struct[k])
     random = '%srandom_effects_%s.txt' %(cur_io_dir, struct[k])
-    template = '%s%s_time_00.lpts' %(template_file_dir, struct[k])
+    template = '%s%s00.lpts' %(template_file_dir, segs[k])
     out_file = '%shypothesis_ctrl_high.txt' %(cur_io_dir)
 
     # Create test path

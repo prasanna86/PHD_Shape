@@ -8,7 +8,7 @@ def main():
   ####################################################################
   input_path = '../mixed_effects_results/'
   output_path = '../output_shape_seq_vtk/'
-  vtk_template_path = '../reg_at_obs_time_pts/50855/'
+  vtk_template_path = '../param_files/'
 
   if not (os.path.isdir(output_path)):
     os.system('mkdir ' + output_path)
@@ -19,8 +19,8 @@ def main():
   times = [['61.66461328', '63.18685832', '64.15605749'], ['61.87268994', '63.93976728'], ['58.09445585', '60.31485284'], ['59.56468172', '60.73100616', '61.5578371', '63.55099247', '64.44900753', '65.65639973'], ['55.2991102', '56.25188227', '57.25119781', '58.30527036', '59.41409993'], ['56.11225188', '57.27036277', '58.05886379'], ['56.10403833', '58.0971937', '59.05270363', '60.07118412'], ['55.84668036', '58.091718', '58.88569473', '59.79466119'], ['58.89664613', '59.89322382', '62.9431896'], ['58.37097878', '60.70910335'], ['54.97878166', '58.02600958', '59.00342231', '59.75085558'], ['57.94661191', '58.92128679', '59.88774812', '60.97193703'], ['59.55920602', '61.60985626'], ['58.90485969', '59.9945243', '60.93360712', '61.89459274', '62.7761807']]
         
   ## Time range is min to max of time data: you can change this
-  min_time = 50#float(min(min(times)))
-  max_time = 70#float(max(max(times)))
+  min_time = float(min(min(times)))
+  max_time = float(max(max(times)))
 
   # lets create shape sequences by structure
   for k in range(0, len(struct)):
@@ -55,7 +55,7 @@ def main():
         bottom.append(line)  # block_of_lines.append(line)
         if line.strip() == 'VECTORS velocity double':
           break
-                
+  
     # read in the fixed-effects file
     fe_file = '%sfixed_effects_%s.txt' %(cur_input_dir, struct[k])
     with open(fe_file, 'r') as f:
