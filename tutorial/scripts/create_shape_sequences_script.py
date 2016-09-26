@@ -1,5 +1,8 @@
 import os
 import math
+import csv
+import sys
+import vtk
 
 def main():
 
@@ -8,7 +11,7 @@ def main():
   ####################################################################
   input_path = '../mixed_effects_results/'
   output_path = '../output_shape_seq_vtk/'
-  vtk_template_path = '../param_files/'
+  vtk_template_path = '../reg_at_obs_time_pts/'
 
   if not (os.path.isdir(output_path)):
     os.system('mkdir ' + output_path)
@@ -132,6 +135,81 @@ def main():
 
       ctrlout.close()
       hdout.close()
+
+      # Calculate Point Normals for each of these vtk files
+      polyReader = vtk.vtkPolyDataReader()
+      polyReader.SetFileName( ctrl_seq_file )
+      polyReader.Update()
+      ctrlData = polyReader.GetOutput()
+
+      polyReader2 = vtk.vtkPolyDataReader()
+      polyReader2.SetFileName( hd_seq_file )
+      polyReader2.Update()
+      hdData = polyReader2.GetOutput()
+      
+      polyNormals_ctrl = vtk.vtkPolyDataNormals()
+      polyNormals_ctrl.SetInputData( ctrlData )
+      polyNormals_ctrl.ComputeCellNormalsOff()
+      polyNormals_ctrl.ComputePointNormalsOn()
+      polyNormals_ctrl.ConsistencyOn()
+      # Splitting Off to make the number of normals consistent with 'velocity' vectors
+      polyNormals_ctrl.SplittingOff()
+      polyNormals_ctrl.Update()
+      ctrlData_wPtNormals = polyNormals_ctrl.GetOutput()
+
+      polyNormals_hd = vtk.vtkPolyDataNormals()
+      polyNormals_hd.SetInputData( hdData )
+      polyNormals_hd.ComputeCellNormalsOff()
+      polyNormals_hd.ComputePointNormalsOn()
+      polyNormals_hd.ConsistencyOn()
+      # Splitting Off to make the number of normals consistent with 'velocity' vectors
+      polyNormals_hd.SplittingOff()
+      polyNormals_hd.Update()
+      hdData_wPtNormals = polyNormals_hd.GetOutput()
+
+      # Calculate expansion by computing dot product between velocity and normals
+      ExpansionFactor_ctrl = vtk.vtkFloatArray()
+      ExpansionFactor_ctrl.SetName( "Expansion" )
+
+      ExpansionFactor_hd = vtk.vtkFloatArray()
+      ExpansionFactor_hd.SetName( "Expansion" )
+
+      # Read Point Normals 
+      Normals_ctrl = ctrlData_wPtNormals.GetPointData().GetArray( "Normals" )
+      Normals_hd = hdData_wPtNormals.GetPointData().GetArray( "Normals" )
+
+      # Read Point Normals 
+      velocity_ctrl = ctrlData_wPtNormals.GetPointData().GetArray( "velocity" )
+      velocity_hd = hdData_wPtNormals.GetPointData().GetArray( "velocity" )
+
+      for i in xrange(ctrlData_wPtNormals.GetNumberOfPoints() ):
+        Nc = Normals_ctrl.GetTuple( i )
+        Nh = Normals_hd.GetTuple( i )
+        vc = velocity_ctrl.GetTuple( i )
+        vh = velocity_hd.GetTuple( i )
+
+        e_ctrl = ( vc[ 0 ] * Nc[ 0 ] ) + ( vc[ 1 ] * Nc[ 1 ] ) + ( vc[ 2 ] * Nc[ 2 ] ) 
+        ExpansionFactor_ctrl.InsertNextValue( e_ctrl )
+
+        e_hd = ( vh[ 0 ] * Nh[ 0 ] ) + ( vh[ 1 ] * Nh[ 1 ] ) + ( vh[ 2 ] * Nh[ 2 ] ) 
+        ExpansionFactor_hd.InsertNextValue( e_hd )
+
+      ctrlData_wPtNormals.GetPointData().AddArray( ExpansionFactor_ctrl )
+      #ctrlData_wPtNormals.Update()
+      hdData_wPtNormals.GetPointData().AddArray( ExpansionFactor_hd )
+      #hdData_wPtNormals.Update()
+
+      polyWriter_ctrl = vtk.vtkPolyDataWriter()
+      polyWriter_ctrl.SetFileName( ctrl_seq_file )
+      polyWriter_ctrl.SetInputData( ctrlData_wPtNormals )
+      polyWriter_ctrl.Write()
+      polyWriter_ctrl.Update()
+
+      polyWriter_hd = vtk.vtkPolyDataWriter()
+      polyWriter_hd.SetFileName( hd_seq_file )
+      polyWriter_hd.SetInputData( hdData_wPtNormals )
+      polyWriter_hd.Write()
+      polyWriter_hd.Update()
 
     time_seq_file = '%stime_seq.txt' %(cur_output_dir)
     fout = open(time_seq_file, 'w')

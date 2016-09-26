@@ -6,7 +6,7 @@ def main():
   ####################################################################
   ###        Ensure these paths are correct for your system        ###
   ####################################################################
-  input_path = '../param_files/'
+  paramfile_path = '../param_files/'
   output_path = '../mixed_effects_results/'
   hypothesis_test_path = '../../bin/shape-lme/hypothesis-testing-tutorial'
   template_file_dir = '../shape_lpts_for_stats/50855/'
@@ -24,7 +24,7 @@ def main():
     print "| Working on the " + struct[k]
     print "\======================================================="
     
-    param_file = '%s%sparam_file.txt' %(input_path, segs[k])
+    param_file = '%s%sparam_file.txt' %(paramfile_path, segs[k])
     cur_io_dir = output_path + struct[k] + '/'
     # Create the output directory if needed
     if not (os.path.isdir(cur_io_dir)):
