@@ -211,7 +211,7 @@ int main(int argc, char ** argv)
 
   // variables to read param file
   string filename;
-  unsigned int nsub = 0, num_fixed = 2, t = 0, obs_thus_far = 0;
+  unsigned int nsub = 0, num_fixed = 2, t = 0;
   ScalarType age, px, py, pz;
   ScalarType gid, sex, subj_num = 50015, prev_subj_num;
 
@@ -220,7 +220,7 @@ int main(int argc, char ** argv)
   ScalarListType groupIDs; groupIDs.resize(nsh);
   ScalarListType sex_of_subjs; sex_of_subjs.resize(nsh);
   ScalarListType ages; ages.resize(nsh);
-  TimePointsType time_pts; VectorType subj_group_ids, nsh_thus_far;
+  TimePointsType time_pts;
   MatrixType X; X.zeros(3*np, nsh);
 
   // open param file again
@@ -230,6 +230,7 @@ int main(int argc, char ** argv)
   // initialize subj number
   prev_subj_num = subj_num; int i, j = 0;
   // reading param file
+  out_file << "Reading param file: " << endl;
   while(getline(input_file, param_line))
   {
     ss.str(param_line);
@@ -244,7 +245,7 @@ int main(int argc, char ** argv)
 
     // opening points file
     shape_file.open(filename.c_str());
-    out_file << "Reading file: " << filename << endl;
+    out_file << "Reading shape file: " << filename << endl;
     i = 0;
     while(getline(shape_file, shape_line))
     {
@@ -257,20 +258,12 @@ int main(int argc, char ** argv)
       ss2.clear();
     }
     shape_file.close();
-    ++j;
+    ++j; // incrementing shape column
 
-    // incrementing time point
-    if(subj_num == prev_subj_num) 
-      ++t;
-    else
+    ++t; // incrementing time point
+    if(subj_num != prev_subj_num)
     {
-      time_pts.push_back(t);
-      obs_thus_far += t;
-      ++nsub;
-      subj_group_ids.resize(nsub);
-      subj_group_ids[nsub] = static_cast<unsigned int>(gid);
-      nsh_thus_far[nsub] = obs_thus_far; 
-      
+      time_pts.push_back(t); ++nsub;
       // re-intializing
       t = 0;
     }
@@ -280,10 +273,7 @@ int main(int argc, char ** argv)
   }
 
   // if file ends, update timepoints with last subject
-  time_pts.push_back(t); ++nsub; obs_thus_far += t;
-  subj_group_ids.resize(nsub);
-  subj_group_ids[nsub] = static_cast<unsigned int>(gid);
-  nsh_thus_far[nsub] = obs_thus_far; 
+  time_pts.push_back(t); ++nsub; 
   
   out_file << "number of subjects = " << nsub << endl;
 
@@ -346,7 +336,7 @@ int main(int argc, char ** argv)
   }
   shape_file.close();
 
-  out_file << "template = " << endl << strans(template_shape) << endl;
+  // out_file << "template = " << endl << strans(template_shape) << endl;
 
   // removing translations from template
   VectorType mean_xyz; mean_xyz.zeros(3); 
@@ -424,8 +414,21 @@ int main(int argc, char ** argv)
   out_file << "orig test stat = " << origTestStat_int 
 	   << " " << origTestStat_slope << endl;
 
-  uvec ctrl = find(subj_group_ids == 0);
-  uvec hd = find(subj_group_ids == 1);
+  MatrixType subj_group_info; subj_group_info.zeros(nsub, 2);
+  ScalarType obs_thus_far = 0;
+  for(i = 0; i < nsub; i++)
+  {
+    subj_group_info(i, 0) = groupIDs[obs_thus_far];
+    subj_group_info(i, 1) = obs_thus_far;
+    obs_thus_far += time_pts[i];
+  }
+
+  uvec ctrl = find(subj_group_info.col(0) == 0);
+  uvec hd = find(subj_group_info.col(0) == 1);
+
+  // out_file << "subj_group_info = " << endl << subj_group_info << endl;
+  // out_file << "ctrl = " << strans(ctrl) << endl;
+  // out_file << "hd = " << strans(hd) << endl;
 
   Col<unsigned int> x; x.zeros(ctrl.size() + hd.size());
   for(i = 0; i < x.size(); i++)
@@ -453,8 +456,8 @@ int main(int argc, char ** argv)
     {
       for(int k = 0; k < time_pts[x[j]]; k++)
       {
-	new_design(nsh_thus_far(x[j]) + k, 2) = 0;
-	new_design(nsh_thus_far(x[j]) + k, 3) = 0;
+	new_design(subj_group_info(x[j], 1) + k, 2) = 0;
+	new_design(subj_group_info(x[j], 1) + k, 3) = 0;
       }
     }
 
@@ -462,11 +465,11 @@ int main(int argc, char ** argv)
     {
       for(int k = 0; k < time_pts[x[j]]; k++)
       {
-	new_design(nsh_thus_far(x[j]) + k, 2) = 1;
-	new_design(nsh_thus_far(x[j]) + k, 3) = new_design(nsh_thus_far(x[j]) + k, 1);
+	new_design(subj_group_info(x[j], 1) + k, 2) = 1;
+	new_design(subj_group_info(x[j], 1) + k, 3) = new_design(subj_group_info(x[j], 1) + k, 1);
       }
     }
-  
+
     runTests(Y, new_design, time_pts, new_fixed, new_random);
     double testStat_int = norm(new_fixed.row(2), "fro");
     double testStat_slope = norm(new_fixed.row(3), "fro");
