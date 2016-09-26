@@ -11,7 +11,7 @@ def main():
   ####################################################################
   input_path = '../mixed_effects_results/'
   output_path = '../output_shape_seq_vtk/'
-  vtk_template_path = '../reg_at_obs_time_pts/'
+  vtk_template_path = '../reg_at_obs_time_pts/50855/'
 
   if not (os.path.isdir(output_path)):
     os.system('mkdir ' + output_path)
